@@ -49,11 +49,11 @@
     @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
   }
   .eyebrow {
-    @apply font-display text-sm font-semibold uppercase tracking-[0.2em] text-brand-500;
+    @apply font-display text-base font-semibold uppercase tracking-[0.2em] text-brand-500 sm:text-lg;
   }
   /* em fundo escuro o vermelho clareia para manter contraste AA (≥ 4,5:1) */
   .eyebrow-dark {
-    @apply font-display text-sm font-semibold uppercase tracking-[0.2em] text-brand-300;
+    @apply font-display text-base font-semibold uppercase tracking-[0.2em] text-brand-300 sm:text-lg;
   }
   .h2 {
     @apply font-display text-4xl font-bold uppercase leading-[0.95] tracking-tight sm:text-5xl;
