@@ -33,6 +33,7 @@ const BARLOW = 'https://raw.githubusercontent.com/google/fonts/main/ofl/barlowco
 const C = {
   red: '#E3261B', // brand-500
   white: '#FFFFFF',
+  steel100: '#E1E8F0',
   steel300: '#9DB2C8',
   steel500: '#4F7193',
   steel900: '#172433', // fundo do ícone (= theme-color)
@@ -233,7 +234,8 @@ async function main() {
   // cores: para fundo claro (vermelho + subtítulo steel-500) e "branco" para fundo escuro, iguais ao topo do site
   const themes = {
     '': { mark: C.red, tag: C.steel500, divider: C.steel300 },
-    '-branco': { mark: C.white, tag: C.steel300, divider: C.white, dividerOpacity: 0.2 },
+    '-branco': { mark: C.white, tag: C.steel100, // subtítulo claro: 15:1 sobre #0c141f
+                 divider: C.white, dividerOpacity: 0.2 },
   };
 
   await fs.mkdir(MARCA, { recursive: true });

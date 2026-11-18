@@ -22,7 +22,7 @@ export function Logo({ light = false, className = '' }: { light?: boolean; class
       ) : (
         <span className="font-display text-[28px] font-extrabold leading-none tracking-[0.06em] text-brand-500">UNIKON</span>
       )}
-      <span className={`hidden border-l pl-2.5 font-display text-[10px] font-semibold uppercase leading-tight tracking-[0.18em] sm:block ${light ? 'border-white/20 text-steel-300' : 'border-steel-300 text-steel-500'}`}>
+      <span className={`hidden border-l pl-2.5 font-display text-[10px] font-semibold uppercase leading-tight tracking-[0.18em] sm:block ${light ? 'border-white/20 text-steel-100' : 'border-steel-300 text-steel-500'}`}>
         Segurança
         <br />
         eletrônica
