@@ -10,7 +10,8 @@
 //
 // Saída:
 //  - public/logo-unikon.svg e logo-unikon-branco.svg  (usados no topo do site)
-//  - public/marca/  unikon-u*, unikon*, unikon-seguranca-eletronica*  (.svg + .png/.webp/.avif em 3 larguras)
+//  - public/marca/  unikon-u*, unikon*, unikon-seguranca-eletronica* (ao lado) e -empilhado (embaixo, mesma largura)
+//                   (.svg + .png/.webp/.avif em 3 larguras)
 //                   unikon-logo-quadrado.png  (logo para o Google: fundo branco, 1200×1200)
 //  - public/favicon.ico (16/32/48), favicon.svg, apple-touch-icon.png (180), icon-192.png, icon-512.png,
 //    icon-maskable-512.png e site.webmanifest
@@ -132,7 +133,7 @@ const svgDoc = (vb, body, label, size) =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb.map((n) => +n.toFixed(2)).join(' ')}"${size ? ` width="${size[0]}" height="${size[1]}"` : ''} role="img" aria-label="${label}"><title>${label}</title>${body}</svg>\n`;
 
 async function main() {
-  const required = ['logo-unikon.svg', 'favicon.ico', 'site.webmanifest', 'marca/unikon-seguranca-eletronica.svg', 'marca/unikon-logo-quadrado.png'];
+  const required = ['logo-unikon.svg', 'favicon.ico', 'site.webmanifest', 'marca/unikon-seguranca-eletronica.svg', 'marca/unikon-seguranca-eletronica-empilhado.svg', 'marca/unikon-logo-quadrado.png'];
   if (!force && (await Promise.all(required.map((f) => exists(path.join(PUB, f))))).every(Boolean)) {
     console.log('[logo] já existe (npm run logo para gerar de novo)');
     return;
@@ -185,10 +186,27 @@ async function main() {
   const tagRight = Math.max(...lines.map((p) => p.getBoundingBox().x2));
   const tagBoxes = lines.map((p) => p.getBoundingBox());
 
+  // Versão EMPILHADA: UNIKON em cima e "SEGURANÇA ELETRÔNICA" numa linha embaixo, centralizado e com a MESMA largura
+  // da palavra (a tinta da 1ª e da última letra encosta nas bordas do U e do N). Espaçamento fixo; o tamanho do texto
+  // é calculado para fechar a largura exata. Espaço entre as linhas: STACK_GAP × altura da palavra.
+  const STACK_TEXT = 'SEGURANÇA ELETRÔNICA';
+  const STACK_TRACK = 0.3; // em
+  const STACK_GAP = 0.3;
+  const wordW = wb.x2 - wb.x1;
+  const wordH = wb.y2 - wb.y1;
+  const probe = trackedPath(opentype, fontTag, STACK_TEXT, 0, 0, 100, STACK_TRACK).getBoundingBox();
+  const stackSize = (100 * wordW) / (probe.x2 - probe.x1);
+  const stackCapH = ((fontTag.tables.os2?.sCapHeight || fontTag.unitsPerEm * 0.7) / fontTag.unitsPerEm) * stackSize;
+  const stackBaseline = wb.y2 + STACK_GAP * wordH + stackCapH;
+  const stackLine = trackedPath(opentype, fontTag, STACK_TEXT, wb.x1 - (probe.x1 * stackSize) / 100, stackBaseline, stackSize, STACK_TRACK);
+  const stackD = stackLine.toPathData(2);
+  const sb = stackLine.getBoundingBox();
+
   const pad = 2;
   const box = (x1, y1, x2, y2) => [x1 - pad, y1 - pad, x2 - x1 + pad * 2, y2 - y1 + pad * 2];
   const wordVB = box(wb.x1, wb.y1, wb.x2, wb.y2);
   const lockVB = box(wb.x1, Math.min(wb.y1, blockTop, ...tagBoxes.map((b) => b.y1)), tagRight, Math.max(wb.y2, blockTop + blockH, ...tagBoxes.map((b) => b.y2)));
+  const stackVB = box(wb.x1, Math.min(wb.y1, sb.y1), wb.x2, sb.y2);
   // U num quadrado (sobra igual dos lados), para servir de ícone
   const uSide = Math.max(ub.x2 - ub.x1, ub.y2 - ub.y1) + pad * 2;
   const uVB = [(ub.x1 + ub.x2) / 2 - uSide / 2, (ub.y1 + ub.y2) / 2 - uSide / 2, uSide, uSide];
@@ -203,7 +221,15 @@ async function main() {
       body: (c) =>
         `<path fill="${c.mark}" d="${wordD}"/><rect x="${divX.toFixed(2)}" y="${blockTop.toFixed(2)}" width="${k.toFixed(2)}" height="${blockH.toFixed(2)}" fill="${c.divider}"${c.dividerOpacity ? ` fill-opacity="${c.dividerOpacity}"` : ''}/><path fill="${c.tag}" d="${tagD}"/>`,
     },
+    'unikon-seguranca-eletronica-empilhado': {
+      vb: stackVB,
+      label: LOCK_LABEL,
+      body: (c) => `<path fill="${c.mark}" d="${wordD}"/><path fill="${c.tag}" d="${stackD}"/>`,
+    },
   };
+  console.log(
+    `[logo] empilhado: texto ${stackSize.toFixed(1)} (palavra 100), bordas: U ${wb.x1.toFixed(2)}/${sb.x1.toFixed(2)}, N ${wb.x2.toFixed(2)}/${sb.x2.toFixed(2)}`,
+  );
   // cores: para fundo claro (vermelho + subtítulo steel-500) e "branco" para fundo escuro, iguais ao topo do site
   const themes = {
     '': { mark: C.red, tag: C.steel500, divider: C.steel300 },
