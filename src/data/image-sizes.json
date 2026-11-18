@@ -1,0 +1,108 @@
+{
+  "alarme-casa.jpg": {
+    "w": 610,
+    "h": 373,
+    "widths": [
+      480,
+      610
+    ]
+  },
+  "app-celular.jpg": {
+    "w": 280,
+    "h": 210,
+    "widths": [
+      280
+    ]
+  },
+  "camera-bullet.jpg": {
+    "w": 259,
+    "h": 195,
+    "widths": [
+      259
+    ]
+  },
+  "camera-externa.jpg": {
+    "w": 1800,
+    "h": 1201,
+    "widths": [
+      480,
+      800,
+      1200,
+      1800
+    ]
+  },
+  "central-monitoramento.jpg": {
+    "w": 211,
+    "h": 162,
+    "widths": [
+      211
+    ]
+  },
+  "cerca-eletrica.jpg": {
+    "w": 501,
+    "h": 329,
+    "widths": [
+      480,
+      501
+    ]
+  },
+  "dvr-cameras.jpg": {
+    "w": 338,
+    "h": 149,
+    "widths": [
+      338
+    ]
+  },
+  "hero-cameras.jpg": {
+    "w": 1800,
+    "h": 1196,
+    "widths": [
+      480,
+      800,
+      1200,
+      1800
+    ]
+  },
+  "kit-alarme.jpg": {
+    "w": 300,
+    "h": 300,
+    "widths": [
+      300
+    ]
+  },
+  "modulo-comunicacao.jpg": {
+    "w": 269,
+    "h": 298,
+    "widths": [
+      269
+    ]
+  },
+  "spot-gen3.jpg": {
+    "w": 235,
+    "h": 214,
+    "widths": [
+      235
+    ]
+  },
+  "spot-phone.jpg": {
+    "w": 275,
+    "h": 183,
+    "widths": [
+      275
+    ]
+  },
+  "spot-trace.jpg": {
+    "w": 275,
+    "h": 183,
+    "widths": [
+      275
+    ]
+  },
+  "teclado-alarme.jpg": {
+    "w": 226,
+    "h": 223,
+    "widths": [
+      226
+    ]
+  }
+}

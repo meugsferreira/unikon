@@ -1,0 +1,49 @@
+# Publica a versão de VISUALIZAÇÃO no GitHub Pages a cada push na main (ou pelo botão "Run workflow").
+# PREVIEW=1: a página sai com "noindex" e robots.txt bloqueando tudo, para não concorrer com o site oficial no Google.
+# BASE_PATH: o Pages publica em https://<usuario>.github.io/<repositorio>/, então o site precisa saber a subpasta.
+# Para ativar: no GitHub, Settings → Pages → Source: "GitHub Actions".
+name: Publicar visualização (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# só o necessário: ler o código e publicar no Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # o prebuild baixa as fotos, confere a marca e gera AVIF/WebP antes do build
+      - run: npm run build
+        env:
+          PREVIEW: '1'
+          BASE_PATH: /${{ github.event.repository.name }}/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
