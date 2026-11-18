@@ -233,7 +233,7 @@ async function main() {
   );
   // cores: para fundo claro (vermelho + subtítulo steel-500) e "branco" para fundo escuro, iguais ao topo do site
   const themes = {
-    '': { mark: C.red, tag: C.steel500, divider: C.steel300 },
+    '': { mark: C.red, tag: C.steel300, divider: C.steel300 }, // subtítulo na mesma cor da barrinha (pedido da dona)
     '-branco': { mark: C.white, tag: C.steel100, // subtítulo claro: 15:1 sobre #0c141f
                  divider: C.white, dividerOpacity: 0.2 },
   };
